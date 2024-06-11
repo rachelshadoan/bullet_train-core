@@ -14,12 +14,30 @@ module ObfuscatesId
     end
 
     def encode_id(id)
-      hashids.encode(id)
+      uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+      
+      if uuid_regex.match?(id.to_s.downcase)
+         encoded_id = hashids.encode_hex(id)
+      else
+        encoded_id = hashids.encode(id)
+      end
+
+      if encoded_id.nil? || encoded_id.empty?
+        raise "Something has gone wrong encoding the id. ID passed as a parameter is: #{id}"
+      end
+
+      return encoded_id
     end
 
     def decode_id(id)
       return id if id.to_i > 0
-      hashids.decode(id).first
+
+      uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+      if uuid_regex.match?(id.to_s.downcase)
+          return hashids.decode_hex(id)
+      else
+          return hashids.decode(id).first
+      end
     end
 
     def find(*ids)
