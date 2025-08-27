@@ -367,7 +367,7 @@ GEM
     public_suffix (5.0.3)
     pwned (2.0.2)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.14)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
     rack-protection (3.1.0)
